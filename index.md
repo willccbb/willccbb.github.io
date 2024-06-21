@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Willam Brown"
+title: "Home"
 ---
 
 <div class="py-24 max-w-xl mx-auto text-center">
