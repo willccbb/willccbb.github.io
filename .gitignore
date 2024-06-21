@@ -1,20 +1,6 @@
-# Jekyll build output
-.jekyll-cache/
 _site
-
-# Node.js dependencies
-node_modules/
-
-# Jekyll-generated files
+.jekyll-cache/
 .sass-cache/
 .jekyll-metadata
-
-# Tailwind CSS generated files (if applicable)
-assets/css/main.css
-
-# System files
+node_modules/
 .DS_Store
-Thumbs.db
-
-# Log files
-*.log
