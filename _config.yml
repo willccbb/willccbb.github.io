@@ -1,6 +1,6 @@
-url: ''
+url: 'https://willccbb.github.io'
 baseurl: ''
-title: 'Jekyllwind'
+title: 'William Brown'
 
 plugins:
   - jekyll-postcss
