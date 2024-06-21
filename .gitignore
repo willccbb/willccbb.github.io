@@ -1,5 +1,6 @@
 # Jekyll build output
 .jekyll-cache/
+_site
 
 # Node.js dependencies
 node_modules/
