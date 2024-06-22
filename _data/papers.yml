@@ -18,6 +18,8 @@
   links:
   - name: "pdf"
     url: "https://academiccommons.columbia.edu/doi/10.7916/j6zc-vj92"
+  - name: "blog"
+    url: "/blog/feedback-loops"
 
 - title: "Online Recommendations for Agents with Discounted Adaptive Preferences"
   authors:
