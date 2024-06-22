@@ -22,6 +22,8 @@ social:
 
 permalink: /blog/:title/
 
+google_analytics: G-361100114
+
 postcss:
   cache: false
 
