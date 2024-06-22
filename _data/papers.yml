@@ -6,6 +6,9 @@
   venue: "COLT 2024"
   type: "Conference"
   note: "Forthcoming"
+  links:
+  - name: "pdf"
+    url: "/assets/pdfs/control_colt24.pdf"
 
 - title: "Learning in the Presence of Adaptive Behavior"
   authors:
@@ -32,6 +35,9 @@
     - "Yikai Zhang"
   type: "Preprint"
   venue: "In submission"
+  links:
+  - name: "pdf"
+    url: "/assets/pdfs/portfolios_old.pdf"
 
 - title: "Is Learning in Games Good for the Learners?"
   authors:
