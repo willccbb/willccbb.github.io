@@ -1,18 +1,11 @@
 ---
 layout: default
-title: "Home"
+title: "About"
 ---
 
-<div class="py-24 max-w-xl mx-auto text-center">
-  <h1 class="text-xl mb-12">
-    <span class="text-4xl block">
-      William Brown
-    </span>
+Hi! I'm a machine learning researcher based in New York City.<br><br>
 
-    <span class="uppercase font-light">
-      About  |  Research  |  Blog  |  Contact
-    </span>
-  </h1>
+I recently completed my PhD (CS) at Columbia, where I was fortunate to be co-advised by [Christos Papadimitriou](https://www.engineering.columbia.edu/faculty/christos-papadimitriou) and [Tim Roughgarden](https://timroughgarden.org/).
+I'll be (re)joining Morgan Stanley's [Machine Learning Research](https://www.morganstanley.com/about-us/technology/machine-learning-research-papers) group in August, where I interned over the past year.<br><br>
 
-  <h2>Under construction.</h2>
-</div>
+Before that, I was an undergrad (CS + philosophy) and masters (DS) student at Penn, and I've spent time in research and engineering roles at AWS, Two Sigma, MongoDB, and AmFam.

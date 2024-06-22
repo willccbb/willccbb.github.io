@@ -5,6 +5,20 @@ title: 'William Brown'
 plugins:
   - jekyll-postcss
 
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+social:
+  twitter: willccbb
+  linkedin: willcb
+  scholar: JUJdJMoAAAAJ
+  github: willccbb
+  email: w.brown@columbia.edu
+
+permalink: /blog/:title/
+
 postcss:
   cache: false
 

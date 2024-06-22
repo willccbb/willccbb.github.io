@@ -4,3 +4,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base {
+    a {
+      @apply text-blue-600 transition duration-300;
+    }
+    a:hover {
+      @apply text-blue-800 underline;
+    }
+    @layer base {
+        .prose p {
+          @apply my-4;
+        }
+        
+        .prose ul, .prose ol {
+          @apply my-4 ml-8;
+        }
+        
+        .prose ul {
+          @apply list-disc;
+        }
+        
+        .prose ol {
+          @apply list-decimal;
+        }
+        
+        .prose li {
+          @apply my-2;
+        }
+        
+        .prose a {
+          @apply text-blue-600 transition duration-300;
+        }
+        
+        .prose a:hover {
+          @apply text-blue-800 underline;
+        }
+    }
+}
