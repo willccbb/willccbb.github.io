@@ -1,4 +1,5 @@
 url: 'https://willcb.com'
+include: [CNAME]
 baseurl: ''
 title: 'William Brown'
 
