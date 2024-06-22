@@ -17,25 +17,6 @@
       gtag('config', '{{ site.google_analytics }}');
     </script>
     {% endif %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <style>
-        .footer-container {
-            position: relative;
-            overflow: hidden;
-        }
-        #ripple-canvas {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* This allows clicks to pass through */
-        }
-        .footer-content {
-            position: relative;
-            z-index: 10; /* Ensure content is above the canvas */
-        }
-    </style>
 </head>
 <body class="bg-stone-100 text-gray-900 font-mono min-h-screen flex flex-col">
   <header class="bg-stone-200 shadow-sm">
@@ -56,7 +37,6 @@
   </main>
   
   <footer class="bg-stone-200 mt-12 py-8">
-      <canvas id="ripple-canvas"></canvas>
       <div class="max-w-4xl mx-auto px-4 text-center">
           <div class="flex justify-center space-x-6 mb-4">
               {% include social-icons.html %}
@@ -64,65 +44,5 @@
           <p class="text-gray-600">&copy; {{ 'now' | date: "%Y" }} William Brown. All rights reserved.</p>
       </div>
   </footer>
-  <script>
-    let scene, camera, renderer, geometry, material, mesh;
-    // Adjustable parameters
-    const SPEED = 0.002; // Increase for faster animation, decrease for slower
-    const GRID_WIDTH = 128; // Increase for higher resolution, decrease for lower
-    const GRID_HEIGHT = 128; // Increase for higher resolution, decrease for lower
-
-    function init() {
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-        renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('ripple-canvas'), alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-
-        geometry = new THREE.PlaneGeometry(20, 20, GRID_WIDTH, GRID_HEIGHT);
-        material = new THREE.MeshBasicMaterial({
-            color: 0xd6d3d1,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.08
-        });
-
-        mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-
-        camera.position.z = 5;
-
-        animate();
-    }
-
-    function animate() {
-        requestAnimationFrame(animate);
-
-        const time = Date.now() * SPEED;
-        const positions = geometry.attributes.position.array;
-
-        for (let i = 0; i < positions.length; i += 3) {
-            const x = positions[i];
-            const y = positions[i + 1];
-            positions[i + 2] = Math.sin(x * 1.5 + time) * 0.2 + Math.sin(y * 2 + time) * 0.2;
-        }
-
-        geometry.attributes.position.needsUpdate = true;
-
-        renderer.render(scene, camera);
-    }
-
-    function onWindowResize() {
-        const footer = document.querySelector('.footer-container');
-        camera.aspect = footer.offsetWidth / footer.offsetHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(footer.offsetWidth, footer.offsetHeight);
-    }
-
-    window.addEventListener('resize', onWindowResize);
-
-
-    init();
-    onWindowResize();
-  </script>
 </body>
 </html>
