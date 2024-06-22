@@ -5,7 +5,6 @@
     - "Tim Roughgarden"
   venue: "COLT 2024"
   type: "Conference"
-  note: "Forthcoming"
   links:
   - name: "pdf"
     url: "/assets/pdfs/control_colt24.pdf"
@@ -31,16 +30,6 @@
     - name: "arXiv"
       url: "https://arxiv.org/abs/2302.06014"
 
-- title: "Online Portfolio Selection with Adversarial Transaction Costs"
-  authors:
-    - "William Brown"
-    - "Yikai Zhang"
-  type: "Preprint"
-  venue: "In submission"
-  links:
-  - name: "pdf"
-    url: "/assets/pdfs/portfolios_old.pdf"
-
 - title: "Is Learning in Games Good for the Learners?"
   authors:
     - "William Brown"
@@ -54,6 +43,16 @@
       url: "https://arxiv.org/abs/2305.19496"
     - name: "talk"
       url: "https://neurips.cc/virtual/2023/poster/70694"
+
+- title: "Online Portfolio Selection with Adversarial Transaction Costs"
+  authors:
+    - "William Brown"
+    - "Yikai Zhang"
+  type: "Preprint"
+  links:
+  - name: "pdf"
+    url: "/assets/pdfs/portfolios_old.pdf"
+
 
 - title: "Diversified Recommendations for Agents with Adaptive Preferences"
   authors:
@@ -104,7 +103,7 @@
     - "Ankit Siva"
   venue: "ICML 2021"
   type: "Conference"
-  note: "Long presentation"
+  note: "Oral"
   links:
     - name: "arXiv"
       url: "https://arxiv.org/abs/2103.06641"

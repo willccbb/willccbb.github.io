@@ -13,7 +13,7 @@ layout: default
 {% for paper in site.data.papers %}
   <div class="paper-item mb-6 pb-6 border-b border-gray-200 last:border-b-0">
     <h2 class="text-lg font-semibold mb-1">{{ paper.title }}</h2>
-    <p class="text-md text-gray-600 mb-1">{{ paper.type }} | {{ paper.venue }}</p>
+    <p class="text-md text-gray-600 mb-1">{{ paper.type }} {% if paper.venue %}| {{ paper.venue }} {% endif %}{% if paper.note %}<strong class="text-red-600">({{ paper.note }})</strong>{% endif %}</p>
     <p class="mb-1">
       {% for author in paper.authors %}
         {% if author == "William Brown" %}
