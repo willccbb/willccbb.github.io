@@ -109,6 +109,8 @@
       url: "https://arxiv.org/abs/2103.06641"
     - name: "talk"
       url: "https://slideslive.com/38958607/differentially-private-query-release-through-adaptive-projection?ref=speaker-19040"
+    - name: "code"
+      url: "https://github.com/amazon-science/relaxed-adaptive-projection/tree/main"
 
 - title: "Targeted Intervention in Random Graphs"
   authors:
