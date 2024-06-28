@@ -6,8 +6,8 @@
   venue: "COLT 2024"
   type: "Conference"
   links:
-  - name: "pdf"
-    url: "/assets/pdfs/control_colt24.pdf"
+  - name: "arXiv"
+    url: "https://arxiv.org/abs/2406.18805"
 
 - title: "Learning in the Presence of Adaptive Behavior"
   authors:
