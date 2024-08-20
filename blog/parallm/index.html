@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParaLLM: 1600+ tok/s on a MacBook - William Brown</title>
+    <link href="/assets/css/main.css" rel="stylesheet">
+    <link href="/assets/css/syntax.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V96LWF8C33"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-V96LWF8C33');
+    </script>
+    
+</head>
+<body class="bg-stone-100 text-gray-900 font-mono min-h-screen flex flex-col">
+  <header class="bg-stone-200 shadow-sm">
+      <div class="max-w-4xl mx-auto px-4 py-6">
+          <h1 class="text-3xl">William Brown</h1>
+          <nav class="mt-4">
+              <ul class="flex space-x-6">
+                  <li><a href="/" class="text-gray-600 hover:text-blue-600 transition duration-300">About</a></li>
+                  <li><a href="/research" class="text-gray-600 hover:text-blue-600 transition duration-300">Research</a></li>
+                  <li><a href="/blog" class="text-gray-600 hover:text-blue-600 transition duration-300">Blog</a></li>
+              </ul>
+          </nav>
+      </div>
+  </header>
+  
+  <main class="max-w-4xl mx-auto px-4 py-8 flex-grow">
+      <div class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-semibold mb-2">ParaLLM: 1600+ tok/s on a MacBook</h1>
+
+  
+    <p class="text-md text-gray-700 mb-12">Batched KV caching for fast parallel LLM inference in MLX.</p>
+  
+
+  <article class="prose lg:prose-xl">
+  <p class="text-sm text-gray-600 mb-4">June 23, 2024</p>
+  <p>Recently I’ve been doing some LLM finetuning experiments on my MacBook using MLX, and found that there wasn’t really a great way to take advantage of parallel inference for evaluating outputs locally. For single-stream applications like chat interfaces, this isn’t a big deal – both <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a> and <a href="https://www.mlxserver.com/">MLXServer</a> run quite fast on Apple devices. But if you’re trying to sample a large number of outputs at once, either for evaluating a training run or for “agent-flavored” applications, neither of them really offer a speedup in terms of total throughput (at least from what I’ve been able to test). If you’re on a CUDA machine, you’d use something like <a href="https://docs.vllm.ai/en/stable/">vLLM</a>, which is a more “production-grade” solution for achieving high tok/s throughput with parallel requests, but it doesn’t work on a Mac.</p>
+
+<p>The main feature we need to enable this in MLX is batched key-value caching. Borrowing heavily from the existing <a href="https://github.com/ml-explore/mlx-examples/tree/main/llms/mlx_lm">mlx_lm</a> library, I extended the <code class="language-plaintext highlighter-rouge">generate</code> method to make use of a <code class="language-plaintext highlighter-rouge">BatchedKVCache</code> object and to allow multiple decoding channels via a <code class="language-plaintext highlighter-rouge">batch_generate</code> method. For “small” models like Gemma-2B, this gets you to <strong>1600+ tokens/sec</strong> in total throughput on a 128GB M3 Max.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">mlx_parallm.utils</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">generate</span><span class="p">,</span> <span class="n">batch_generate</span>
+
+<span class="c1"># fun trick for generating workloads
+</span><span class="kn">import</span> <span class="n">string</span>
+<span class="n">capital_letters</span> <span class="o">=</span> <span class="n">string</span><span class="p">.</span><span class="n">ascii_uppercase</span>
+<span class="n">distinct_pairs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">capital_letters</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">capital_letters</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]]</span>
+<span class="n">prompt_template</span> <span class="o">=</span> <span class="sh">"</span><span class="s">Think of a real word containing both the letters {l1} and {l2}. Then, say 3 sentences which use the word.</span><span class="sh">"</span>
+<span class="n">prompts_raw</span> <span class="o">=</span> <span class="p">[</span><span class="n">prompt_template</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">l1</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">l2</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">random</span><span class="p">.</span><span class="nf">sample</span><span class="p">(</span><span class="n">distinct_pairs</span><span class="p">,</span> <span class="mi">325</span><span class="p">)]</span>
+
+<span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="nf">load</span><span class="p">(</span><span class="sh">"</span><span class="s">google/gemma-1.1-2b-it</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">responses</span> <span class="o">=</span> <span class="nf">batch_generate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">prompts</span><span class="o">=</span><span class="n">prompts_raw</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/1600toks.png" alt="1600+ tokens per second via Gemma-2B (float16)" /></p>
+
+<p>The code is available on GitHub as <a href="https://github.com/willccbb/mlx_parallm/tree/main">mlx_parallm</a>. I’ve tested with Gemma-2B, Phi-3-mini, and Llama3-8B, all of which get substantial throughput gains vs. single-stream generation, particularly as you increase the number of parallel requests.</p>
+
+<p>Some features like repetition penalties and streaming outputs aren’t supported yet, but I’ll look into putting up a <code class="language-plaintext highlighter-rouge">batch_generate</code> PR for mlx_lm if I can get it to a point where it’d be non-breaking. In the meantime, it should be easy to add other models by copying the architecture file(s) from <code class="language-plaintext highlighter-rouge">mlx_lm/models</code> into <code class="language-plaintext highlighter-rouge">mlx_parallm/models</code> and replacing any <code class="language-plaintext highlighter-rouge">KVCache</code> references with <code class="language-plaintext highlighter-rouge">BatchedKVCache</code>.</p>
+
+
+</article>
+
+  
+</div>
+  </main>
+  
+  <footer class="bg-stone-200 mt-12 py-8">
+      <div class="max-w-4xl mx-auto px-4 text-center">
+          <div class="flex justify-center space-x-6 mb-4">
+              
+<a href="https://twitter.com/willccbb" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-600">
+    <i class="fab fa-x-twitter fa-lg"></i>
+</a>
+
+
+
+<a href="https://www.linkedin.com/in/willcb" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-600">
+    <i class="fab fa-linkedin-in fa-lg"></i>
+</a>
+
+
+
+<a href="https://scholar.google.com/citations?user=JUJdJMoAAAAJ" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-600">
+    <i class="fas fa-graduation-cap fa-lg"></i>
+</a>
+
+
+
+<a href="https://github.com/willccbb" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-600">
+    <i class="fab fa-github fa-lg"></i>
+</a>
+
+
+
+<a href="mailto:w.brown@columbia.edu" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-600">
+    <i class="fa fa-envelope fa-lg"></i>
+</a>
+
+          </div>
+          <p class="text-gray-600">&copy; 2024 William Brown. All rights reserved.</p>
+      </div>
+  </footer>
+</body>
+</html>
