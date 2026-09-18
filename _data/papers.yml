@@ -1,9 +1,33 @@
-- title: "PRIME-RL: Distributed RL Training at Scale"
+- title: "Medmarks: A Comprehensive Open-Source LLM Benchmark Suite for Medical Tasks"
+  authors:
+    - "Benjamin Warner et al."
+  venue: "2026"
+  type: "Preprint"
+  links:
+  - name: "arXiv"
+    url: "https://arxiv.org/abs/2605.01417"
+
+- title: "INTELLECT-3: Technical Report"
   authors:
     - "Prime Intellect Team"
   venue: "2025"
-  type: "Repo"
+  type: "Technical Report"
   links:
+  - name: "arXiv"
+    url: "https://arxiv.org/abs/2512.16144"
+
+- title: "PRIME-RL: Async & Decentralized RL Training at Scale"
+  authors:
+    - "Mika Senghaas"
+    - "Fares Obeid"
+    - "Sami Jaghouar"
+    - "William Brown"
+    - "et al."
+  venue: "NeurIPS ScaleOPT 2025"
+  type: "Workshop"
+  links:
+  - name: "OpenReview"
+    url: "https://openreview.net/forum?id=yk3ICpEbv8"
   - name: "GitHub"
     url: "https://github.com/PrimeIntellect-ai/prime-rl"
 
@@ -30,19 +54,30 @@
   - name: "arXiv"
     url: "https://arxiv.org/abs/2508.06813"
 
+- title: "Reinforcing Multi-Turn Reasoning in LLM Agents via Turn-Level Reward Design"
+  authors:
+    - "Quan Wei"
+    - "Siliang Zeng"
+    - "Chenliang Li"
+    - "William Brown"
+    - "et al."
+  venue: "2025"
+  type: "Preprint"
+  links:
+  - name: "arXiv"
+    url: "https://arxiv.org/abs/2505.11821v2"
+
 - title: "Reinforcing Multi-Turn Reasoning in LLM Agents via Turn-Level Credit Assignment"
   authors:
     - "Siliang Zeng"
     - "Quan Wei"
     - "William Brown"
-    - "Oana Frunza"
-    - "Yuriy Nevmyvaka"
-    - "Mingyi Hong"
+    - "et al."
   venue: "ICML Workshop on Computer Use Agents 2025"
   type: "Workshop"
   links:
   - name: "arXiv"
-    url: "https://arxiv.org/abs/2505.11821"
+    url: "https://arxiv.org/abs/2505.11821v1"
 
 - title: "Clustering and Entity Matching via Language Model Community Detection"
   authors:
@@ -197,4 +232,3 @@
       url: "https://arxiv.org/abs/2003.00584"
     - name: "blog"
       url: "https://www.mongodb.com/blog/post/using-change-point-detection-find-performance-regressions"
-
