@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="$HOME/.local/bin:$PATH"
+
+step() {
+  printf '\n==> %s\n' "$1"
+}
+
+step "Install Ruby build prerequisites"
+missing_packages=()
+for package in build-essential ruby-dev ruby-full; do
+  if ! dpkg-query -W -f='${db:Status-Status}\n' "$package" 2>/dev/null | grep -qx installed; then
+    missing_packages+=("$package")
+  fi
+done
+
+if ((${#missing_packages[@]})); then
+  sudo apt-get update -qq
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq "${missing_packages[@]}"
+else
+  echo "Ruby build prerequisites are already installed."
+fi
+
+step "Install the locked Bundler version"
+bundler_version="$(awk '/^BUNDLED WITH$/ { getline; gsub(/^[[:space:]]+|[[:space:]]+$/, ""); print; exit }' Gemfile.lock)"
+if [[ -z "$bundler_version" ]]; then
+  echo "Gemfile.lock does not declare a Bundler version." >&2
+  exit 1
+fi
+
+user_gem_dir="$(ruby -e 'print Gem.user_dir')"
+gem_bin="$user_gem_dir/bin"
+if [[ ! -f "$user_gem_dir/specifications/bundler-${bundler_version}.gemspec" || ! -x "$gem_bin/bundle" ]]; then
+  gem install --user-install bundler --version "$bundler_version" --no-document
+fi
+
+mkdir -p "$HOME/.local/bin"
+ln -sfn "$gem_bin/bundle" "$HOME/.local/bin/bundle"
+ln -sfn "$gem_bin/bundler" "$HOME/.local/bin/bundler"
+
+bundle_path="$HOME/.cache/bundle/willccbb.github.io"
+bundle "_${bundler_version}_" config set --local path "$bundle_path"
+bundle "_${bundler_version}_" config set --local force_ruby_platform true
+
+step "Install locked Ruby dependencies"
+BUNDLE_FROZEN=true bundle "_${bundler_version}_" install
+
+step "Install locked Node dependencies"
+if ! command -v node >/dev/null || ! command -v npm >/dev/null; then
+  echo "The Amp orb base image must provide Node.js and npm." >&2
+  exit 1
+fi
+
+if ! command -v yarn >/dev/null || [[ "$(yarn --version)" != 1.* ]]; then
+  npm install --global --prefix "$HOME/.local" yarn@1.22.22
+fi
+yarn install --frozen-lockfile --non-interactive
+
+step "Orb setup complete"
+printf 'Ruby %s; Bundler %s; Node %s; Yarn %s\n' \
+  "$(ruby -e 'print RUBY_VERSION')" \
+  "$(bundle "_${bundler_version}_" --version | awk '{print $3}')" \
+  "$(node --version)" \
+  "$(yarn --version)"

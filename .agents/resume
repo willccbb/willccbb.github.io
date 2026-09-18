@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="$HOME/.local/bin:$PATH"
+
+command -v ruby >/dev/null
+command -v node >/dev/null
+command -v yarn >/dev/null
+command -v bundle >/dev/null
+
+test -d node_modules
+bundle check >/dev/null
