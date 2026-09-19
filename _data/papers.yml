@@ -54,18 +54,19 @@
   - name: "arXiv"
     url: "https://arxiv.org/abs/2508.06813"
 
-- title: "Reinforcing Multi-Turn Reasoning in LLM Agents via Turn-Level Reward Design"
+- title: "Reinforcing Multi-Turn Reasoning in LLM Agents via Fine-Grained Reward Structure and Credit Assignment"
   authors:
     - "Quan Wei"
     - "Siliang Zeng"
     - "Chenliang Li"
+    - "Zhongruo Wang"
     - "William Brown"
     - "et al."
-  venue: "2025"
+  venue: "2026"
   type: "Preprint"
   links:
   - name: "arXiv"
-    url: "https://arxiv.org/abs/2505.11821v2"
+    url: "https://arxiv.org/abs/2505.11821v3"
 
 - title: "Reinforcing Multi-Turn Reasoning in LLM Agents via Turn-Level Credit Assignment"
   authors:
